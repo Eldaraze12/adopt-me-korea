@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt Me Korea! — Official Landing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* TEMEL STİLLER */
+        body {
+            background-color: #0a0c15;
+            font-family: 'Inter', sans-serif;
+            color: #f2f4fc;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* BUTONLAR */
+        .btn-group { display: flex; gap: 15px; margin-bottom: 40px; }
+        
+        .btn-primary {
+            background: #E81F76;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(232,31,118,0.3);
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover { transform: translateY(-3px); background: #ff2b85; }
+
+        .btn-outline-light {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 26px;
+            border-radius: 60px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-outline-light:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+        /* SERVER GRID & CARDS */
+        .section-header { margin-bottom: 30px; }
+        .section-eyebrow { color: #E81F76; font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 5px; }
+        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
+        .section-sub { color: #a5b4d4; max-width: 600px; }
+
+        .server-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .server-card {
+            background: rgba(20, 24, 40, 0.8);
+            border: 1px solid rgba(232, 31, 118, 0.2);
+            border-radius: 24px;
+            padding: 25px;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .server-card:hover {
+            transform: translateY(-8px);
+            border-color: #E81F76;
+            background: rgba(30, 35, 55, 0.9);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .card-icon { font-size: 2rem; background: #1a1f35; padding: 10px; border-radius: 15px; }
+        .server-name { font-weight: 800; font-size: 1.2rem; }
+        .region-text { font-size: 0.8rem; color: #9aa9c7; }
+
+        .tag-group { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
+        .tag { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .tag.highlight { background: rgba(232,31,118,0.2); color: #ff9acb; }
+
+        .ping-badge { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #b9c8ff; border-top: 1px solid rgba(255,255,255,0.05); pt: 15px; margin-top: auto; }
+        .dot-green { width: 8px; height: 8px; background: #2ED9C3; border-radius: 50%; box-shadow: 0 0 5px #2ED9C3; }
+
+        /* FAQ */
+        .faq-list { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+        .faq-item { background: rgba(255,255,255,0.03); border-radius: 18px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .faq-question { font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .faq-answer { font-size: 0.9rem; color: #c5d0e6; }
+
+        /* TOAST BİLDİRİMİ */
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #E81F76; color: white; padding: 12px 30px; border-radius: 50px;
+            font-weight: 700; transition: 0.5s; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        #toast.show { bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<div id="toast">Sunucuya bağlanılıyor...</div>
+
+<div class="container">
+    <div class="btn-group">
+        <button class="btn-primary" onclick="handleJoin()">Join Korean Server</button>
+        <button class="btn-outline-light" onclick="scrollToServers()">Server Guide</button>
+    </div>
+
+    <main>
+        <div class="section-header" id="servers">
+            <div class="section-eyebrow">SERVER LIST</div>
+            <h2 class="section-title">Choose your Korean gateway</h2>
+            <p class="section-sub">Optimized routes for Korea, Japan, and Asia-Pacific. Experience ultra-low latency with our 6 dedicated servers.</p>
+        </div>
+        
+        <div class="server-grid">
+            <div class="server-card" onclick="handleJoin()">
+                <div class="card-header">
+                    <div class="card-icon">🏙️</div>
+                    <div>
+                        <div class="server-name">Seoul Main · Prime</div>
+                        <div class="region-text">Seoul, Korea (Primary)</div>
+                    </div>
+                </div>
+                <div class="tag-group"><span class="tag highlight">Recommended</span><span class="tag">Korean UI</span><span class="tag">Full access</span></div>
+                <div class="ping-badge"><span class="dot-green"></span> Ping average: 16ms · Best for competitive play</div>
+            </div>
+
+            <div class="server-card" onclick="handleJoin()">
+                <div class="card-header">
+                    <div class="card-icon">🤝</div>
+                    <div>
+                        <div class="server-name">Seoul Trading Hub</div>
+                        <div class="region-text">Seoul, Korea</div>
+                    </div>
+                </div>
+                <div class="tag-group"><span class="tag">Trade focused</span><span class="tag highlight">Korean / ENG</span></div>
+                <div class="ping-badge"><span class="dot-green"></span> Ping average: 19ms · Active marketplace</div>
+            </div>
+
+            <div class="server-card" onclick="handleJoin()">
+                <div class="card-header">
+                    <div class="card-icon">🌊</div>
+                    <div>
+                        <div class="server-name">Busan Gateway</div>
+                        <div class="region-text">Busan, Korea</div>
+                    </div>
+                </div>
+                <div class="tag-group"><span class="tag">Casual play</span><span class="tag">KR community</span></div>
+                <div class="ping-badge"><span class="dot-green"></span> Ping average: 28ms · Relaxed atmosphere</div>
+            </div>
+            
+            </div>
+
+        <div style="margin-top: 60px;">
+            <div class="section-eyebrow">KNOWLEDGE BASE</div>
+            <h2 class="section-title">Frequently asked questions</h2>
+            <p class="section-sub">Everything about Korean servers & localization.</p>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">How do I connect to a Korean server?</div>
+                    <div class="faq-answer">When you launch Adopt Me! on Roblox, the game will automatically route you to the nearest server with the best ping.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I play with international friends?</div>
+                    <div class="faq-answer">Absolutely! Just invite your friends via Roblox join feature.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const SERVER_URL = "https://roblox.com.ge/games/920587237/Adopt-Me?privateServerLinkCode=90956201967759887805089940753111";
+
+    function handleJoin() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            window.open(SERVER_URL, '_blank');
+        }, 1500);
+    }
+
+    function scrollToServers() {
+        document.getElementById('servers').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
